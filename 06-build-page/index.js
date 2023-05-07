@@ -10,7 +10,6 @@ const OUTPUT_FOLDER = 'project-dist';
 const OUTPUT_HTML_FILE = 'index.html';
 const OUTPUT_CSS_FILE = 'style.css';
 const OUTPUT_ASSETS_FOLDER = 'assets';
-const OUTPUT_CSS_FOLDER = 'styles';
 
 const INPUT_HTML_FILE = 'template.html';
 const INPUT_COMPONENTS_FOLDER = 'components';
@@ -107,7 +106,7 @@ function createCssBundle() {
 
   let styleFilesInFilesFolder = 0;
 
-  fs.mkdir(path.join(__dirname, OUTPUT_FOLDER, OUTPUT_CSS_FOLDER), { recursive: true }, (err) => {
+  fs.mkdir(path.join(__dirname, OUTPUT_FOLDER), { recursive: true }, (err) => {
     if (err) return console.error(err.message);
   });
 
@@ -129,7 +128,7 @@ function createCssBundle() {
           if (styleFilesInFilesFolder === filesContent.length) {
             const bundleContent = filesContent.join('\n');
 
-            fs.writeFile(path.join(__dirname, OUTPUT_FOLDER, OUTPUT_CSS_FOLDER, OUTPUT_CSS_FILE), bundleContent, (err) => {
+            fs.writeFile(path.join(__dirname, OUTPUT_FOLDER, OUTPUT_CSS_FILE), bundleContent, (err) => {
               if (err) return console.error(err.message);
             });
           }
