@@ -29,7 +29,7 @@ function makeProject() {
 function createFolder() {
   fs.mkdir(path.join(__dirname, OUTPUT_FOLDER), { recursive: true }, (err) => {
     if (err) return console.error(err.message);
-  })
+  });
 }
 function createHtmlBundle() {
   fs.readFile(path.join(__dirname, INPUT_HTML_FILE), 'utf-8', (err, data) => {

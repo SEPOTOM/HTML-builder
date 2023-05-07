@@ -27,4 +27,4 @@ process.on('SIGINT', () => {
 
 process.on('exit', () => {
   stdout.write(FAREWELL_MESSAGE);
-})
+});
