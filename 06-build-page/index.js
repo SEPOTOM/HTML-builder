@@ -38,7 +38,7 @@ function createHtmlBundle() {
 
     const dataArray = data.split(REG_EXP);
     dataArray.forEach((dataPart, index) => {
-      if (!dataPart.includes(LOWER_THAN)) {
+      if (!dataPart.includes(LOWER_THAN) && dataPart.trim()) {
         counter = counter ? counter + 1 : 1;
 
         const fileName = `${dataPart}${HTML_EXT}`;
