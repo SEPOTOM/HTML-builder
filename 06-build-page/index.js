@@ -66,38 +66,42 @@ function copyAssets(inputFolder, outputFolder) {
   let sourceFiles = [];
 
   fs.mkdir(outputFolder, { recursive: true }, (err) => {
-    if (err) return console.error(err.message);
-  });
+    if (err) return console.error(err);
 
-  fs.readdir(inputFolder, { withFileTypes: true, recursive: true }, (err, files) => {
-    if (err) return console.error(err.message);
+    fs.readdir(inputFolder, { withFileTypes: true }, (err, files) => {
+      if (err) return console.error(err.message);
 
-    sourceFiles = files;
+      let counter = 0;
 
-    files.forEach((file) => {
-      if (file.isDirectory()) {
-        copyAssets(path.join(inputFolder, file.name), path.join(outputFolder, file.name));
-      } else {
-        fs.readFile(path.join(inputFolder, file.name), 'utf-8', (err, data) => {
-          if (err) return console.error(err.message);
-
-          fs.writeFile(path.join(outputFolder, file.name), data, (err) => {
+      files.forEach((file) => {
+        if (file.isDirectory()) {
+          copyAssets(path.join(inputFolder, file.name), path.join(outputFolder, file.name));
+        } else {
+          fs.copyFile(path.join(inputFolder, file.name), path.join(outputFolder, file.name), (err) => {
             if (err) return console.error(err.message);
+
+            counter++;
+
+            if (counter === files.length) {
+              const outerFiles = files;
+
+              fs.readdir(outputFolder, { withFileTypes: true }, (err, files) => {
+                if (err) return console.error(err.message);
+
+                files.forEach((file) => {
+                  const sameOuterFile = outerFiles.find((outerFile) => outerFile.name === file.name);
+
+                  if (!sameOuterFile && !file.isDirectory()) {
+                    fs.unlink(path.join(outputFolder, file.name), (err) => {
+                      if (err) return console.error(err.message);
+                    });
+                  }
+                });
+              });
+            }
           });
-        });
-      }
-    });
-  });
-
-  fs.readdir(outputFolder, { withFileTypes: true }, (err, files) => {
-    if (err) return console.error(err.message);
-
-    files.forEach((file) => {
-      if (!sourceFiles.includes(file) && !file.isDirectory()) {
-        fs.unlink(path.join(outputFolder, file.name), (err) => {
-          if (err) return console.error(err.message);
-        });
-      }
+        }
+      });
     });
   });
 }
